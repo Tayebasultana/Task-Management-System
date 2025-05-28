@@ -30,7 +30,7 @@ const AddTask = () => {
 
   return (
     <>
-      <h2 className="text-center text-3xl font-bold  text-purple-700">
+      <h2 className="text-center text-3xl font-bold mb-4  text-purple-700">
         Add Task
       </h2>
       <div className="flex justify-center">

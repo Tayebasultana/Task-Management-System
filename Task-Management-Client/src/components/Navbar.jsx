@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useContext } from "react";
 import { ThemeContext } from "../provider/ThemeProvider";
@@ -7,6 +7,10 @@ import Theme from "./Theme";
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const { theme } = useContext(ThemeContext);
+   const location = useLocation();
+
+  // Check if current route is home
+  const isHome = location.pathname === "/";
   const links = (
     <>
       {user ? (
@@ -37,8 +41,9 @@ const Navbar = () => {
     </>
   );
   return (
-    <div className="navbar bg-base-100 flex justify-between items-center">
-      <div className="flex">
+    <div className={`navbar z-20 bg-base-100 flex justify-between items-center px-2 md:px-7 lg:px-16 
+      ${isHome ? "fixed" : "relative"}`}>
+      <div className="flex ">
         <Link to="/" className="text-3xl font-bold text-purple-700">
           Flowra
         </Link>

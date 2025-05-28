@@ -5,7 +5,13 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    /* tailwind.config.js */
+extend: {
+  animation: {
+    'spin-slow': 'spin 8s linear infinite',
+  },
+}
+,
   },
     plugins: [require("daisyui")],
 

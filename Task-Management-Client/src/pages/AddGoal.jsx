@@ -57,7 +57,7 @@ const AddGoal = () => {
 
   return (
     <>
-      <h2 className="text-center text-3xl font-bold text-purple-700 mb-6">Add Goal</h2>
+      <h2 className="text-center text-3xl font-bold text-purple-700 mb-4">Add Goal</h2>
       <div className="flex justify-center">
         <div className="card bg-base-100 w-full max-w-lg border border-purple-600 p-6 rounded-lg shadow-lg">
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
