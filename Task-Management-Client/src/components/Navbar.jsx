@@ -12,8 +12,9 @@ const Navbar = () => {
       {user ? (
         <>
           <li>
-            <NavLink to="/add-task">Add Task</NavLink>
+            <NavLink to="/dashboard/daily-task" className="btn ">Dashboard</NavLink>
           </li>
+         
           <li>
             <button
               onClick={logOut}
@@ -57,7 +58,7 @@ const Navbar = () => {
             <div className="w-10 rounded-full">
               <img
                 referrerPolicy="no-referrer"
-                alt="Tailwind CSS Navbar component"
+                alt="User Avatar"
                 src={
                   user
                     ? user?.photoURL
