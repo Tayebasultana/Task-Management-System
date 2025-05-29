@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const port = process.env.PORT || 5000;
 const app = express();
+const jwt = require("jsonwebtoken");
+
 
 //middleware
 app.use(cors());
@@ -24,12 +26,42 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     
     const db = client.db("TaskDB");
     const taskCollection = db.collection("tasks");
     const userCollection = db.collection("users");
     const goalCollection = db.collection("goals");
+
+    // ======= JWT AUTHENTICATION =======
+    
+    //generate jwt token
+    app.post('/jwt', async (req, res) => {
+        const user = req.body;
+        const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+        res.send({token});
+    })
+
+    // middlewares
+    const verifyToken = (req, res, next) => {
+        console.log('Authorization Header:', req.headers.authorization);
+    
+        if (!req.headers.authorization) {
+            return res.status(401).send({ message: 'Forbidden access: No token provided' });
+        }
+    
+        const token = req.headers.authorization.split(' ')[1];
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                console.error('Token Verification Failed:', err.message);
+                return res.status(401).send({ message: 'Forbidden access: Invalid token' });
+            }
+    
+            console.log('Decoded Token:', decoded);
+            req.decoded = decoded;
+            next();
+        });
+    };
 
     // ======= EXISTING TASKS & USERS ROUTES =======
 
@@ -137,19 +169,19 @@ async function run() {
 
   // Update goal
    app.put("/goals/:id", async (req, res) => {
-  const id = req.params.id;
-  const updatedGoal = req.body;
-
-  try {
-    const result = await goalCollection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: updatedGoal }
-    );
-    res.send(result);
-  } catch (err) {
-    res.status(500).send({ error: "Failed to update goal" });
-  }
-});
+     const id = req.params.id;
+     const updatedGoal = req.body;
+   
+     try {
+       const result = await goalCollection.updateOne(
+         { _id: new ObjectId(id) },
+         { $set: updatedGoal }
+       );
+       res.send(result);
+     } catch (err) {
+       res.status(500).send({ error: "Failed to update goal" });
+     }
+   });
 
     // Delete goal
     app.delete("/goals/:id", async (req, res) => {
@@ -160,6 +192,17 @@ async function run() {
       } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Failed to delete goal" });
+      }
+    });
+
+    // Quote fetch
+    app.get("/api/quotes", async (req, res) => {
+      try {
+        const response = await fetch("https://zenquotes.io/api/quotes");
+        const data = await response.json();
+        res.json(data);
+      } catch (err) {
+        res.status(500).json({ error: "Failed to fetch quotes" });
       }
     });
 
