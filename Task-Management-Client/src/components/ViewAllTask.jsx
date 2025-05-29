@@ -5,6 +5,7 @@ import axios from "axios";
 import Loading from "./Loading";
 import useAuth from "../hooks/useAuth";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import MotivationQuote from "./MotivationQuote";
 
 const ViewAllTask = () => {
   const { user } = useAuth();
@@ -100,6 +101,7 @@ const ViewAllTask = () => {
       <h2 className="text-4xl  font-bold mb-4 text-center text-purple-700">
         View All Tasks
       </h2>
+      <div><MotivationQuote></MotivationQuote></div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {Object.keys(tasks).map((category) => (

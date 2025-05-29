@@ -5,6 +5,7 @@ import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 import confetti from "canvas-confetti";
 import { ThemeContext } from "../provider/ThemeProvider";
+import MotivationQuote from "../components/MotivationQuote";
 
 const Goals = () => {
   const { user } = useAuth();
@@ -108,7 +109,7 @@ const deleteGoal = async (id) => {
   return (
     <div className="max-w-4xl mx-auto p-4">
       <h2 className="text-3xl font-bold text-center mb-4 text-purple-700">My Goals</h2>
-
+      <div><MotivationQuote></MotivationQuote></div>
       {/* Tabs */}
       <div className="tabs tabs-box justify-center mb-6">
         <input
@@ -141,57 +142,60 @@ const deleteGoal = async (id) => {
         <p className="text-center text-gray-500">No {type} goals found.</p>
       )}
 
-      <ul className="space-y-6">
-        {goals.map((goal) => (
-          <li key={goal._id}
-          className={`p-4 border rounded-lg shadow 
-            ${
-              goal.isCompleted
-                ? theme === "dark"
-                  ? "bg-green-900/50"
-                  : "bg-green-200"
-                : theme === "dark"
-                ? "bg-gray-800"
-                : "bg-white"
-            }`}>
-            <div className="flex justify-between items-start gap-2">
-              <h3 className={`text-xl font-semibold`}>
-                {goal.title}
-              </h3>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleEditGoal(goal)}
-                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
-                >
-                  Edit
-                </button>
+      <div className="space-y-6">
+  {goals.map((goal) => (
+    <div key={goal._id} className={`p-4 border rounded-lg shadow
+      ${
+        goal.isCompleted
+          ? theme === "dark"
+            ? "bg-green-900/50"
+            : "bg-green-200"
+          : theme === "dark"
+          ? "bg-gray-800"
+          : "bg-white"
+      }`}
+    >
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+        <h3 className="text-xl font-semibold">{goal.title}</h3>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => handleEditGoal(goal)}
+            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+          >
+            Edit
+          </button>
 
-                {!goal.isCompleted && (
-                  <button
-                    onClick={() => markComplete(goal._id)}
-                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
-                  >
-                    Mark Done
-                  </button>
-                )}
-                <button
-                  onClick={() => deleteGoal(goal._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-            <p className="mt-2"><strong>Why:</strong> {goal.why}</p>
-            <p><strong>How:</strong> {goal.how}</p>
-            <p><strong>Roadmap:</strong> {goal.roadmap}</p>
-            {goal.deadline && (
-              <p><strong>Deadline:</strong> {new Date(goal.deadline).toLocaleDateString()}</p>
-            )}
-            <p><strong>Priority:</strong> {goal.priority?.charAt(0).toUpperCase() + goal.priority?.slice(1)}</p>
-          </li>
-        ))}
-      </ul>
+          {!goal.isCompleted && (
+            <button
+              onClick={() => markComplete(goal._id)}
+              className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
+            >
+              Mark Done
+            </button>
+          )}
+
+          <button
+            onClick={() => deleteGoal(goal._id)}
+            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-2 space-y-1 text-sm text-gray-700 dark:text-gray-300">
+        <p><strong>Why:</strong> {goal.why}</p>
+        <p><strong>How:</strong> {goal.how}</p>
+        <p><strong>Roadmap:</strong> {goal.roadmap}</p>
+        {goal.deadline && (
+          <p><strong>Deadline:</strong> {new Date(goal.deadline).toLocaleDateString()}</p>
+        )}
+        <p><strong>Priority:</strong> {goal.priority?.charAt(0).toUpperCase() + goal.priority?.slice(1)}</p>
+      </div>
+    </div>
+  ))}
+</div>
+
       {/* Edit Modal */}
       {showEditModal && editingGoal && (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

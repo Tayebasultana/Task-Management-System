@@ -3,6 +3,7 @@ import useAuth from "../hooks/useAuth";
 import { useContext } from "react";
 import { ThemeContext } from "../provider/ThemeProvider";
 import Theme from "./Theme";
+import Drawer from "./Drawer";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
@@ -43,10 +44,16 @@ const Navbar = () => {
   return (
     <div className={`navbar z-20 bg-base-100 flex justify-between items-center px-2 md:px-7 lg:px-16 
       ${isHome ? "fixed" : "relative"}`}>
-      <div className="flex ">
-        <Link to="/" className="text-3xl font-bold text-purple-700">
+      <div className="flex gap-4">
+        <div>
+          <Link to="/" className="text-3xl font-bold text-purple-700">
           Flowra
         </Link>
+        </div>
+        <div className={`${isHome ? "hidden" : "block"}`}>
+          {/* Drawer for mobile */}
+        <Drawer/>
+        </div>
       </div>
       <div className="flex items-center gap-5">
         {/* toggle theme */}

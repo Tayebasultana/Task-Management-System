@@ -9,6 +9,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
+import axios from "axios";
 
 export const AuthContext = createContext();
 const provider = new GoogleAuthProvider();
@@ -49,16 +50,28 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  // Observer
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+  // AuthProvider.jsx
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
+      const userInfo = { email: currentUser.email };
+      axios.post(`${import.meta.env.VITE_API_URL}/jwt`, userInfo)
+        .then(res => {
+          if (res.data.token) {
+            localStorage.setItem('access-token', res.data.token);
+          }
+        });
       setUser(currentUser);
-      console.log(currentUser);
-      setLoading(false);
-    });
+    } else {
+      setUser(null);
+      localStorage.removeItem('access-token');
+    }
+    setLoading(false);
+  });
 
-    return () => unsubscribe();
-  }, []);
+  return () => unsubscribe();
+}, []);
+
 
   const authInfo = {
     user,
